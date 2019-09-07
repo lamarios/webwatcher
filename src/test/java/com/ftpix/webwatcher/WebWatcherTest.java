@@ -1,15 +1,17 @@
 package com.ftpix.webwatcher;
 
-
 import com.ftpix.sparknnotation.Sparknotation;
 import com.ftpix.webwatcher.implementations.CountListener;
 import com.ftpix.webwatcher.model.DefaultWebSite;
 import com.ftpix.webwatcher.server.TestWebController;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -288,13 +290,7 @@ public class WebWatcherTest {
 
         try {
             // triggers the checks every second
-            new Thread(() -> {
-                try {
-                    webWatcher.checkPeriodically(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            new Thread(() -> webWatcher.checkPeriodically(1)).start();
 
 
             // we check every seconds so we sleep every to to make sure it goes through one round of check
@@ -361,7 +357,7 @@ public class WebWatcherTest {
 
 
     @Test
-    public void testMultipleWebsites(){
+    public void testMultipleWebsites() {
         TestWebController controller = Sparknotation.getController(TestWebController.class);
         CountListener countListener = new CountListener();
 
@@ -407,6 +403,29 @@ public class WebWatcherTest {
         assertEquals("yo2", countListener.lastContent.get(1));
 
 
+    }
+
+
+    @Disabled
+    @Test
+    public void readMeCases() {
+        // simple watch
+        WebWatcher.watch("https://www.example.org", "https://www.archlinux.org")
+                .onChange((site, newContent, pageNewHtml) -> System.out.println(pageNewHtml))
+                .triggerEventOnFirstCheck(true)
+                .checkPeriodically(3600);
+
+
+        DefaultWebSite site = new DefaultWebSite("https://www.google.com");
+        site.setCssSelector(".custom-css p.selector");
+
+        WebWatcher.watch(site)
+                .onChange((updatedSite, newContent, pageNewHtml) -> System.out.println(pageNewHtml))
+                .triggerEventOnFirstCheck(true)
+                .onError((nonWorkingWebSite, error) -> error.printStackTrace())
+                .bodyOnly(true)
+                .textOnly(true)
+                .checkPeriodically(3600);
     }
 
 }

@@ -51,7 +51,7 @@ public class WebWatcher<T  extends WebSite> {
      * @param urls a list of URLs to watch
      * @return a new web watcher for the given websites
      */
-    public static WebWatcher watch(String... urls) {
+    public static WebWatcher<DefaultWebSite> watch(String... urls) {
         DefaultWebSite[] sites = Stream.of(urls)
                 .filter(Objects::nonNull)
                 .filter(url -> url.trim().length() > 0)
@@ -67,7 +67,7 @@ public class WebWatcher<T  extends WebSite> {
      * @param sites a list of  sites to watch
      * @return a new web watcher for the given websites
      */
-    public static <U extends WebSite> WebWatcher watch(U... sites) {
+    public static <U extends WebSite> WebWatcher<U> watch(U... sites) {
         return new WebWatcher<>(sites);
     }
 
@@ -78,7 +78,7 @@ public class WebWatcher<T  extends WebSite> {
      * @param triggerEvent the flag
      * @return itself
      */
-    public WebWatcher triggerEventOnFirstCheck(boolean triggerEvent) {
+    public WebWatcher<T> triggerEventOnFirstCheck(boolean triggerEvent) {
         triggerEventIfNoPreviousHash = triggerEvent;
         return this;
     }
@@ -90,7 +90,7 @@ public class WebWatcher<T  extends WebSite> {
      * @param listener a listener to do something when a website changes
      * @return itself
      */
-    public WebWatcher onChange(WebSiteListener<T> listener) {
+    public WebWatcher<T> onChange(WebSiteListener<T> listener) {
         this.listener = listener;
         return this;
     }
@@ -102,7 +102,7 @@ public class WebWatcher<T  extends WebSite> {
      * @param errorListener an error listener to add to the watcher
      * @return itself
      */
-    public WebWatcher onError(WebSiteErrorListener<T> errorListener) {
+    public WebWatcher<T> onError(WebSiteErrorListener<T> errorListener) {
         this.errorListener = errorListener;
         return this;
     }
@@ -113,7 +113,7 @@ public class WebWatcher<T  extends WebSite> {
      * @param textOnly defaults to false
      * @return itself
      */
-    public WebWatcher textOnly(boolean textOnly) {
+    public WebWatcher<T> textOnly(boolean textOnly) {
         this.textOnly = textOnly;
         return this;
     }
@@ -125,7 +125,7 @@ public class WebWatcher<T  extends WebSite> {
      * @param bodyOnly defaults to false
      * @return itself
      */
-    public WebWatcher bodyOnly(boolean bodyOnly) {
+    public WebWatcher<T> bodyOnly(boolean bodyOnly) {
         this.bodyOnly = bodyOnly;
         return this;
     }
@@ -251,11 +251,15 @@ public class WebWatcher<T  extends WebSite> {
      * @param intervalInSeconds the delay in seconds between each checks
      * @throws InterruptedException if the sleep fails
      */
-    public void checkPeriodically(int intervalInSeconds) throws InterruptedException {
+    public void checkPeriodically(int intervalInSeconds) {
         checkLoopRunning = true;
         while (checkLoopRunning) {
             check();
-            Thread.sleep(intervalInSeconds * 1000);
+            try {
+                Thread.sleep(intervalInSeconds * 1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
