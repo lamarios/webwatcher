@@ -63,8 +63,8 @@ public class WebWatcher<T  extends WebSite> {
 
     /**
      * Watch a list of websites
-     *
      * @param sites a list of  sites to watch
+     * @param <U> a class that implements a WebSote
      * @return a new web watcher for the given websites
      */
     public static <U extends WebSite> WebWatcher<U> watch(U... sites) {
@@ -249,7 +249,6 @@ public class WebWatcher<T  extends WebSite> {
      * trigger the website watch periodically (blocking)
      *
      * @param intervalInSeconds the delay in seconds between each checks
-     * @throws InterruptedException if the sleep fails
      */
     public void checkPeriodically(int intervalInSeconds) {
         checkLoopRunning = true;

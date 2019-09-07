@@ -1,21 +1,26 @@
 #Web Watcher
+![build](https://ci.ftpix.com/app/rest/builds/buildType:Webwatcher_Build/statusIcon)
+![maven](https://maven-badges.herokuapp.com/maven-central/com.ftpix/webwatcher/badge.svg)
+
+
 Web watcher is a simple library to detect changes in a web page
 
 ## Requirements
 - java 8
 
 ## Download
-```
+```xml
 <dependency>
   <groupId>com.ftpix</groupId>
   <artifactId>webwatcher</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 ```
 
 
 ## Usage
 
+[Java doc](https://lamarios.github.io/webwatcher/)
 
 ### Basic usage
 To monitor a bunch of websites, do the following:
@@ -91,4 +96,7 @@ WebWatcher.watch("https://www.example.org", "https://www.archlinux.org")
         .triggerEventOnFirstCheck(true)
         .check();
 ```
+
+This allows you to have more control on when to check. It can be useful if you want to load a bunch of sites from a DB,
+check it once save the result to the DB and be done.
 
