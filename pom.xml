@@ -32,7 +32,7 @@
 
     <scm>
         <url>https://github.com/lamarios/webwatcher</url>
-        <connection>scm:git:git://github.com/lamarios/webwatcher.git</connection>
+        <connection>scm:git://git@github.com/lamarios/webwatcher.git</connection>
 
       <tag>webwatcher-1.0</tag>
   </scm>
