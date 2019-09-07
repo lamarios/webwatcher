@@ -2,7 +2,7 @@ package com.ftpix.webwatcher.interfaces;
 
 import java.util.List;
 
-public interface WebSiteListener {
+public interface WebSiteListener<T extends WebSite> {
 
     /**
      * @param site        the website being checked, the with its last content hash
@@ -10,5 +10,5 @@ public interface WebSiteListener {
      *                    if the site has no css selector, the first item will be the same as pageNewHtml
      * @param pageNewHtml the HTML of the content of the page
      */
-    void onContentChange(WebSite site, List<String> newContent, String pageNewHtml);
+    void onContentChange(T site, List<String> newContent, String pageNewHtml);
 }

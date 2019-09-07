@@ -20,11 +20,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class WebWatcher {
+public class WebWatcher<T  extends WebSite> {
     private boolean checkLoopRunning = true;
-    private List<? extends WebSite> sites;
-    private WebSiteListener listener;
-    private WebSiteErrorListener errorListener;
+    private List<T> sites;
+    private WebSiteListener<T> listener;
+    private WebSiteErrorListener<T> errorListener;
     private boolean triggerEventIfNoPreviousHash = false;
     private boolean textOnly = false;
 
@@ -39,22 +39,9 @@ public class WebWatcher {
     /**
      * Watch a list of websites
      *
-     * @param urls a list of URLs to watch
-     */
-    private WebWatcher(String... urls) {
-        sites = Stream.of(urls)
-                .filter(Objects::nonNull)
-                .filter(url -> url.trim().length() > 0)
-                .map(DefaultWebSite::new)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Watch a list of websites
-     *
      * @param sites a list of sites to watch
      */
-    private WebWatcher(WebSite... sites) {
+    private WebWatcher(T... sites) {
         this.sites = Stream.of(sites).collect(Collectors.toList());
     }
 
@@ -65,7 +52,12 @@ public class WebWatcher {
      * @return a new web watcher for the given websites
      */
     public static WebWatcher watch(String... urls) {
-        return new WebWatcher(urls);
+        DefaultWebSite[] sites = Stream.of(urls)
+                .filter(Objects::nonNull)
+                .filter(url -> url.trim().length() > 0)
+                .map(DefaultWebSite::new)
+                .toArray(DefaultWebSite[]::new);
+        return new WebWatcher<>(sites);
     }
 
 
@@ -75,8 +67,8 @@ public class WebWatcher {
      * @param sites a list of  sites to watch
      * @return a new web watcher for the given websites
      */
-    public static WebWatcher watch(WebSite... sites) {
-        return new WebWatcher(sites);
+    public static <U extends WebSite> WebWatcher watch(U... sites) {
+        return new WebWatcher<>(sites);
     }
 
 
@@ -98,7 +90,7 @@ public class WebWatcher {
      * @param listener a listener to do something when a website changes
      * @return itself
      */
-    public WebWatcher onChange(WebSiteListener listener) {
+    public WebWatcher onChange(WebSiteListener<T> listener) {
         this.listener = listener;
         return this;
     }
@@ -110,7 +102,7 @@ public class WebWatcher {
      * @param errorListener an error listener to add to the watcher
      * @return itself
      */
-    public WebWatcher onError(WebSiteErrorListener errorListener) {
+    public WebWatcher onError(WebSiteErrorListener<T> errorListener) {
         this.errorListener = errorListener;
         return this;
     }
@@ -152,7 +144,7 @@ public class WebWatcher {
      *
      * @param site the site to check
      */
-    private void checkSingleSite(WebSite site) {
+    private void checkSingleSite(T site) {
 
         try {
             Document parse = Jsoup.parse(new URL(site.getUrl()), 10000);

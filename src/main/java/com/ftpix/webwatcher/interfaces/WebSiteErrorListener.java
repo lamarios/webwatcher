@@ -1,11 +1,11 @@
 package com.ftpix.webwatcher.interfaces;
 
-public interface WebSiteErrorListener {
+public interface WebSiteErrorListener<T extends WebSite> {
 
     /**
      * Catch the errors throw by the check
       * @param site the site that was checked
      * @param e the exception that was thrown
      */
-    void onError(WebSite site, Exception e);
+    void onError(T site, Exception e);
 }
