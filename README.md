@@ -1,6 +1,8 @@
 #Web Watcher
+
 ![build](https://ci.ftpix.com/app/rest/builds/buildType:Webwatcher_Build/statusIcon)
 ![maven](https://maven-badges.herokuapp.com/maven-central/com.ftpix/webwatcher/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/lamarios/webwatcher/badge.svg?branch=master)](https://coveralls.io/github/lamarios/webwatcher?branch=master)
 
 
 Web watcher is a simple library to detect changes in a web page
