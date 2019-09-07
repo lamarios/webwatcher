@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ftpix</groupId>
-    <artifactId>web-watcher</artifactId>
+    <artifactId>webwatcher</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -14,6 +14,9 @@
         <!-- github server corresponds to entry in ~/.m2/settings.xml -->
         <github.global.server>github</github.global.server>
         <skip.publish.process>true</skip.publish.process>
+        <min.coverage>0.80</min.coverage>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <licenses>
@@ -31,6 +34,8 @@
 
     <scm>
         <url>https://github.com/lamarios/webwatcher</url>
+        <connection>scm:git:git://github.com/lamarios/webwatcher.git</connection>
+
     </scm>
 
 
@@ -78,17 +83,19 @@
 
     </dependencies>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -96,27 +103,76 @@
                 <version>2.22.2</version>
             </plugin>
 
-            <!-- Code coverage -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.2</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <version>4.3.0</version>
+            </plugin>
+            <!-- Jacoco -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.2</version>
+
                 <configuration>
+                    <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                    <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <!--                    <execution>
+                                            <id>check</id>
+                                            <goals>
+                                                <goal>check</goal>
+                                            </goals>
+                                            <configuration>
+                                                <rules>
+                                                    <rule>
+                                                        <element>CLASS</element>
+                                                        <limits>
+                                                            <limit>
+                                                                <counter>LINE</counter>
+                                                                <value>COVEREDRATIO</value>
+                                                                <minimum>${min.coverage}</minimum>
+                                                            </limit>
+                                                            <limit>
+                                                                <counter>BRANCH</counter>
+                                                                <value>COVEREDRATIO</value>
+                                                                <minimum>${min.coverage}</minimum>
+                                                            </limit>
+                                                        </limits>
+                                                    </rule>
+                                                </rules>
+                                            </configuration>
+                                        </execution>-->
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>3.1.3</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
+
 
             <!-- Deployment stuff -->
             <plugin>
@@ -188,4 +244,13 @@
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dist</id>
+            <properties>
+                <skip.publish.process>false</skip.publish.process>
+            </properties>
+        </profile>
+    </profiles>
 </project>
