@@ -62,6 +62,7 @@ public class WebWatcher {
      * Watch a list of websites
      *
      * @param urls a list of URLs to watch
+     * @return a new web watcher for the given websites
      */
     public static WebWatcher watch(String... urls) {
         return new WebWatcher(urls);
@@ -72,6 +73,7 @@ public class WebWatcher {
      * Watch a list of websites
      *
      * @param sites a list of  sites to watch
+     * @return a new web watcher for the given websites
      */
     public static WebWatcher watch(WebSite... sites) {
         return new WebWatcher(sites);
@@ -81,7 +83,7 @@ public class WebWatcher {
     /**
      * Whetehr or not to trigger event if the website has never been checked before
      *
-     * @param triggerEvent
+     * @param triggerEvent the flag
      * @return itself
      */
     public WebWatcher triggerEventOnFirstCheck(boolean triggerEvent) {
@@ -93,8 +95,8 @@ public class WebWatcher {
     /**
      * A listener to do something when the website changes
      *
-     * @param listener
-     * @return
+     * @param listener a listener to do something when a website changes
+     * @return itself
      */
     public WebWatcher onChange(WebSiteListener listener) {
         this.listener = listener;
@@ -105,8 +107,8 @@ public class WebWatcher {
     /**
      * a listener to handle errors
      *
-     * @param errorListener
-     * @return
+     * @param errorListener an error listener to add to the watcher
+     * @return itself
      */
     public WebWatcher onError(WebSiteErrorListener errorListener) {
         this.errorListener = errorListener;
@@ -117,7 +119,7 @@ public class WebWatcher {
      * To set whether the content checking is only on the visible text (true) or the html structure (false)
      *
      * @param textOnly defaults to false
-     * @return
+     * @return itself
      */
     public WebWatcher textOnly(boolean textOnly) {
         this.textOnly = textOnly;
@@ -129,7 +131,7 @@ public class WebWatcher {
      * note that this parameter is overriden is a {@link WebSite} has a css selector
      *
      * @param bodyOnly defaults to false
-     * @return
+     * @return itself
      */
     public WebWatcher bodyOnly(boolean bodyOnly) {
         this.bodyOnly = bodyOnly;
@@ -148,7 +150,7 @@ public class WebWatcher {
     /**
      * Checks a single website
      *
-     * @param site
+     * @param site the site to check
      */
     private void checkSingleSite(WebSite site) {
 
@@ -208,7 +210,7 @@ public class WebWatcher {
      * Creates a hash from a list of elements
      *
      * @param elements the list of elements
-     * @return
+     * @return the hash of the combined elements
      */
     private String hashElements(Stream<Element> elements) {
         String content = elements
@@ -223,7 +225,7 @@ public class WebWatcher {
      * Creates a MD5 hash of  a string
      *
      * @param text
-     * @return
+     * @return  the hash of a text
      */
     private String hash(String text) {
         try {
@@ -255,6 +257,7 @@ public class WebWatcher {
      * trigger the website watch periodically (blocking)
      *
      * @param intervalInSeconds the delay in seconds between each checks
+     * @throws InterruptedException if the sleep fails
      */
     public void checkPeriodically(int intervalInSeconds) throws InterruptedException {
         checkLoopRunning = true;

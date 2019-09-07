@@ -225,6 +225,7 @@
                 </executions>
                 <configuration>
                     <skip>${skip.publish.process}</skip>
+                    <source>${maven.compiler.source}</source>
                 </configuration>
             </plugin>
 

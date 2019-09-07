@@ -7,14 +7,14 @@ public interface WebSite {
     /**
      * THe URL of the website to check
      *
-     * @return
+     * @return the url of the website
      */
     String getUrl();
 
     /**
      * When the content was checked last
      *
-     * @return
+     * @return the date
      */
     LocalDateTime getLastCheck();
 
@@ -22,7 +22,7 @@ public interface WebSite {
     /**
      * Gets the hash of the content the last time it was checked
      *
-     * @return
+     * @return the last hash
      */
     String getLastContentHash();
 
@@ -30,7 +30,7 @@ public interface WebSite {
      * Specifies a css selector to check against.
      * If this is set it will ignore {@link com.ftpix.webwatcher.WebWatcher#bodyOnly} parameter
      *
-     * @return
+     * @return the css selector
      */
     String getCssSelector();
 

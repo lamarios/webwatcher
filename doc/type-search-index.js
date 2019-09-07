@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"com.ftpix.webwatcher.model","l":"DefaultWebSite"},{"p":"com.ftpix.webwatcher.interfaces","l":"WebSite"},{"p":"com.ftpix.webwatcher.interfaces","l":"WebSiteErrorListener"},{"p":"com.ftpix.webwatcher.interfaces","l":"WebSiteListener"},{"p":"com.ftpix.webwatcher","l":"WebWatcher"}]
