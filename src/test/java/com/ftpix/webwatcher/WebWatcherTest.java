@@ -428,4 +428,26 @@ public class WebWatcherTest {
                 .checkPeriodically(3600);
     }
 
+
+    @Test
+    public void test2ElementSelector() {
+        TestWebController controller = Sparknotation.getController(TestWebController.class);
+        CountListener countListener = new CountListener();
+
+        DefaultWebSite site = new DefaultWebSite("http://localhost:4567/simple");
+        site.setCssSelector(".content, h1");
+
+        WebWatcher webWatcher = WebWatcher.watch(site)
+                .onChange(countListener)
+                .onError(countListener)
+                .textOnly(true)
+                .triggerEventOnFirstCheck(true);
+
+        webWatcher.check();
+
+
+        System.out.println(countListener.lastContent);
+
+    }
+
 }

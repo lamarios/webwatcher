@@ -21,7 +21,7 @@ public class CountListener implements WebSiteListener<DefaultWebSite>, WebSiteEr
     @Override
     public void onContentChange(DefaultWebSite site, List<String> newContent, String pageNewHtml) {
         count++;
-        System.out.println(pageNewHtml);
+//        System.out.println(pageNewHtml);
         lastContent = newContent;
     }
 }
