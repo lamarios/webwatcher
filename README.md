@@ -15,7 +15,7 @@ Web watcher is a simple library to detect changes in a web page
 <dependency>
   <groupId>com.ftpix</groupId>
   <artifactId>webwatcher</artifactId>
-  <version>1.1</version>
+  <version>1.2</version>
 </dependency>
 ```
 
